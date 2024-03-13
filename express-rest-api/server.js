@@ -1,7 +1,9 @@
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 const userRoutes = require('./routes/userRoutes');
 
 app.use(express.json());
@@ -10,7 +12,7 @@ app.get('/', (req, res) => {
     res.send("Hello World");    
 });
 
-mongoose.connect('mongodb://127.0.0.1:27017/appdb')
+mongoose.connect(process.env.DATABASE_URL)
   .then(() => {
     console.log('MongoDB connected');
     app.listen(PORT, () => {
