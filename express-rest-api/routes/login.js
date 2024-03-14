@@ -29,17 +29,6 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.get('/profile', passport.authenticate('jwt', { session: false }), (req, res) => {
-    const requestedUser = req.query.user;
 
-    if (req.user.role === 'admin' || req.user.username === requestedUser) {
-
-        res.json({ message: 'Authorized'});
-        
-    } else {
-
-        res.status(403).json({ error: 'Not authorized' });
-    }
-});
 
 module.exports = router;
