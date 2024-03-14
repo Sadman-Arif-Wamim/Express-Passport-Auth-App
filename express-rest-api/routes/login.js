@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const Admin = require('../models/admin');
+const UserLogin = require('../models/userlogs');
 
 router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
         console.log(req.body);
-        // Check if username exists
-        const user = await Admin.findOne({ username }, 'username password');
+
+        const user = await UserLogin.findOne({ username }, 'username password role');
         console.log(user);
         if (!user) {
             console.log(true)
