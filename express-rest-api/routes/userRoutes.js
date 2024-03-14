@@ -69,7 +69,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-router.put('/update-role/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.put('/update/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
       const requestedUser = req.query.user;
 
@@ -78,27 +78,43 @@ router.put('/update-role/:username', passport.authenticate('jwt', { session: fal
       }
 
       const { username } = req.params;
-      const { role } = req.body;
+      const { role, name, age } = req.body;
 
-      if (!role || (role !== 'regular' && role !== 'premium')) {
-          return res.status(400).json({ error: 'Invalid role' });
+      if (role && (role === 'regular' || role === 'premium')) {
+          await UserLogin.findOneAndUpdate(
+              { username },
+              { $set: { role } }
+          );
+      } else {
+        return res.status(400).json({ error: 'Invalid role' });
       }
 
-      const updatedUser = await UserLogin.findOneAndUpdate(
-          { username },
-          { $set: { role } },
-          { new: true }
-      );
-
-      if (!updatedUser) {
-          return res.status(404).json({ error: 'User not found' });
+      if (name || age !== undefined) {
+          const updateFields = {};
+          if (name) {
+              if (!/^[a-zA-Z\s]+$/.test(name)) {
+                  return res.status(400).json({ error: 'Name should contain only alphabets' });
+              }
+              updateFields.name = name;
+          }
+          if (age !== undefined) {
+              if (typeof age !== 'number' || age < 0) {
+                  return res.status(400).json({ error: 'Age should be a positive number' });
+              }
+              updateFields.age = age;
+          }
+          await User.findOneAndUpdate(
+              { username },
+              { $set: updateFields }
+          );
       }
 
-      res.json({ message: 'Role updated successfully', details: {id: updatedUser.id, username: updatedUser.username,  role: updatedUser.role} });
+      res.json({ message: 'User details updated successfully'});
   } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Server error' });
   }
 });
+
 
 module.exports = router;
