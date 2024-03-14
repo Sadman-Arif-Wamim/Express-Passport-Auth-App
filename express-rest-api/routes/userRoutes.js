@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const passport = require('../config/passport-config');
 const User = require('../models/user');
 
 router.get('/getUsers', async (req, res) => {
@@ -13,7 +13,7 @@ router.get('/getUsers', async (req, res) => {
   }
 });
 
-router.get('/getUserByName', async (req, res) => {
+router.get('/getUserByUsername', async (req, res) => {
   try {
     const { username } = req.query;
     const user = await User.findOne({ username }, 'username name age gender');
