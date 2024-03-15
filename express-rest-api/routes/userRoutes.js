@@ -116,5 +116,25 @@ router.put('/update/:username', passport.authenticate('jwt', { session: false })
   }
 });
 
+router.delete('/delete/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  try {
+      const requestedUser = req.query.user;
+      
+      if (req.user.role !== 'admin' && req.user.username !== requestedUser) {
+          return res.status(403).json({ error: 'Not authorized' });
+      }
+
+      const { username } = req.params;
+
+      await UserLogin.findOneAndDelete({ username });
+
+      await User.findOneAndDelete({ username });
+
+      res.json({ message: 'User deleted successfully' });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Server error' });
+  }
+});
 
 module.exports = router;
