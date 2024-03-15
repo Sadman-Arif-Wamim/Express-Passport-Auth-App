@@ -25,7 +25,7 @@ router.get('/profile', passport.authenticate('jwt', { session: false }), async (
   const requestedUser = req.query.user;
 
   if (req.user.role === 'admin' || req.user.username === requestedUser) {
-    const user = await User.findOne({ username: requestedUser }, 'username name age gender');
+    const user = await User.findOne({ username: requestedUser }, 'id username name age gender');
     res.json({ user });
 
   } else {
