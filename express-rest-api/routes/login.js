@@ -64,5 +64,33 @@ router.post('/register', async (req, res) => {
     }
   });
 
+  router.put('/change-password', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    try {
+        const { oldPassword, newPassword } = req.body;
+
+        if (!oldPassword || !newPassword) {
+            return res.status(400).json({ error: 'Both old password and new password are required' });
+        }
+
+        const user = await UserLogin.findOne({ username: req.user.username });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ error: 'Invalid old password' });
+        }
+
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+        await UserLogin.findOneAndUpdate({ username: req.user.username }, { $set: { password: hashedNewPassword } });
+
+        res.json({ message: 'Password changed successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});   
 
 module.exports = router;
