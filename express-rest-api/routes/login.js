@@ -29,6 +29,40 @@ router.post('/login', async (req, res) => {
     }
 });
 
+router.post('/register', async (req, res) => {
+    try {
+      const { name, username, age, gender, password } = req.body;
+      const existingUser = await User.findOne({ username });
+  
+      if (existingUser) {
+        return res.status(400).json({ error: 'Username already exists' });
+      }
+  
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const userLog = new UserLogin({
+        username,
+        password: hashedPassword,
+        role: 'regular'
+      });
+  
+      await userLog.save();
+  
+      const user = new User({
+        username,
+        name,
+        age,
+        gender
+      });
+  
+      await user.save();
+  
+      res.status(201).json({ message: 'User registered successfully' });
+    }
+    catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Server error' });
+    }
+  });
 
 
 module.exports = router;

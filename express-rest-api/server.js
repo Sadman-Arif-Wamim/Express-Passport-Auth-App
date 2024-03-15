@@ -4,7 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const PORT = process.env.PORT;
-const userRoutes = require('./routes/userroutes');
+const getUsers = require('./routes/getusers');
 const loginRoutes = require('./routes/login');
 const passport = require('./config/passport-config');
 
@@ -25,5 +25,5 @@ mongoose.connect(process.env.DATABASE_URL)
     })
     .catch(err => console.error('MongoDB connection error:', err));
 
-app.use('/api', userRoutes);
+app.use('/api', getUsers);
 app.use('/api', loginRoutes);
