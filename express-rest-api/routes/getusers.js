@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const UserLogin = require('../models/userlogs');
 
-router.get('/all', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.get('/all-users', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
     if (req.user.role !== 'admin') {
       return res.status(403).json({ error: 'Not authorized' });
@@ -34,7 +34,7 @@ router.get('/profile', passport.authenticate('jwt', { session: false }), async (
 });
 
 
-router.put('/update/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.put('/update-user/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
       const requestedUser = req.query.user;
 
@@ -81,7 +81,7 @@ router.put('/update/:username', passport.authenticate('jwt', { session: false })
   }
 });
 
-router.delete('/delete/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.delete('/delete-user/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
       const requestedUser = req.query.user;
       

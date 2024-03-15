@@ -7,6 +7,7 @@ const PORT = process.env.PORT;
 const getUsers = require('./routes/getusers');
 const loginRoutes = require('./routes/login');
 const passport = require('./config/passport-config');
+const getBooks = require('./routes/getbooks');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
@@ -27,3 +28,4 @@ mongoose.connect(process.env.DATABASE_URL)
 
 app.use('/api', getUsers);
 app.use('/api', loginRoutes);
+app.use('/api', getBooks);
