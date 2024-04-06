@@ -25,7 +25,7 @@
 
 ## About The Project
 
-The Express Bookstore Management System is a modern web application designed to simplify and automate bookstore management tasks using the Express.js framework for Node.js. This project provides a robust platform for bookstore owners and managers to efficiently manage their inventory, handle sales transactions, and interact with customers.
+The Express Bookstore Management System is a modern back-end application designed to simplify and automate bookstore management tasks using the Express.js framework for Node.js. This project provides a robust platform for bookstore owners and managers to efficiently manage their inventory, handle sales transactions, and interact with customers.
 
 ## Key Features:
 
